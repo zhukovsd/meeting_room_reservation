@@ -7,8 +7,8 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String roleName;
 
@@ -18,7 +18,7 @@ public class Role {
     public Role() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

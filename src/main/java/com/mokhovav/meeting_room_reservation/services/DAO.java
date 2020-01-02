@@ -6,6 +6,7 @@ public interface DAO<T> {
     public void save(T object);
     public void update(T object);
     public void delete(T object);
-    public List<T> getBy(Class c, String field, Object value);
-    public List<T> findObjects(Class c);
+    public T findBy(Class c, String field, Object value);
+    public List<T> findAllBy(Class c, String field, Object value);
+    public List<T> findAll(Class c);
 }

@@ -48,12 +48,28 @@ public class DAOService<T> implements DAO<T> {
     }
 
     @Override
-    public List<T> getBy(Class c, String field, Object value) {
-        return (List<T>) sessionFactory.openSession().createQuery("From "+c.getName()+" where "+field+"="+value).list();
+    public T findBy(Class c, String field, Object value) {
+        Session session = sessionFactory.openSession();
+        List<T> list =  session.createQuery("from "+c.getName()+" where "+field+"=:value").setParameter("value",value).list();
+        session.close();
+        if (list.isEmpty()) return null;
+        else return  list.get(0);
     }
 
     @Override
-    public List<T> findObjects(Class c) {
-        return (List<T>) sessionFactory.openSession().createQuery("From "+ c.getName()).list();
+    public List<T> findAllBy(Class c, String field, Object value) {
+        Session session = sessionFactory.openSession();
+        List<T> list = session.createQuery("from "+c.getName()+" where "+field+"=:value").setParameter("value",value).list();
+        session.close();
+        return list;
     }
+
+    @Override
+    public List<T> findAll(Class c) {
+        Session session = sessionFactory.openSession();
+        List<T> list = (List<T>) session.createQuery("From "+ c.getName()).list();
+        session.close();
+        return list;
+    }
+
 }
