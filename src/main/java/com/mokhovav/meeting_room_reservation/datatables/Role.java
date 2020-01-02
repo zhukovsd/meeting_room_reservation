@@ -8,8 +8,9 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String role_name;
+    private long id;
+
+    private String roleName;
 
     @ManyToMany(mappedBy = "roles")         // Bidirectional communication
     private Set<User> users;
@@ -17,20 +18,20 @@ public class Role {
     public Role() {
     }
 
-    public Role(String role_name) {
-        this.role_name = role_name;
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public String getRole_name() {
-        return role_name;
+    public Role(String roleName) {
+        this.roleName = roleName;
     }
 
-    public void setRole_name(String role_name) {
-        this.role_name = role_name;
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Set<User> getUsers() {

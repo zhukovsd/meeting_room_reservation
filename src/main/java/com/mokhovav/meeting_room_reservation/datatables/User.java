@@ -10,10 +10,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String user_name;
+    private String userName;
     private String password;
     private boolean active;
-    private boolean change_password;
+    private boolean changePassword;
 
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "users_id"))
@@ -23,30 +23,30 @@ public class User {
     private Set<Reservation> reservations;
 
     @OneToMany(mappedBy = "author")         // Bidirectional communication
-    private Set<Message> user_messages;
+    private Set<Message> userMessages;
 
     @ManyToMany(mappedBy = "addressees")    // Bidirectional communication
-    private Set<Message> receive_messages;
+    private Set<Message> receiveMessages;
 
     public User() {
     }
-    public User(String user_name, String password) {
-        this.user_name = user_name;
+    public User(String userName, String password) {
+        this.userName = userName;
         this.password = password;
         active = true;
-        change_password = true;
+        changePassword = true;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -65,12 +65,12 @@ public class User {
         this.active = active;
     }
 
-    public boolean isChange_password() {
-        return change_password;
+    public boolean isChangePassword() {
+        return changePassword;
     }
 
-    public void setChange_password(boolean change_password) {
-        this.change_password = change_password;
+    public void setChangePassword(boolean changePassword) {
+        this.changePassword = changePassword;
     }
 
     public Set<Role> getRoles() {
@@ -89,19 +89,19 @@ public class User {
         this.reservations = reservations;
     }
 
-    public Set<Message> getUser_messages() {
-        return user_messages;
+    public Set<Message> getUserMessages() {
+        return userMessages;
     }
 
-    public void setUser_messages(Set<Message> user_messages) {
-        this.user_messages = user_messages;
+    public void setUserMessages(Set<Message> userMessages) {
+        this.userMessages = userMessages;
     }
 
-    public Set<Message> getReceive_messages() {
-        return receive_messages;
+    public Set<Message> getReceiveMessages() {
+        return receiveMessages;
     }
 
-    public void setReceive_messages(Set<Message> receive_messages) {
-        this.receive_messages = receive_messages;
+    public void setReceiveMessages(Set<Message> receiveMessages) {
+        this.receiveMessages = receiveMessages;
     }
 }

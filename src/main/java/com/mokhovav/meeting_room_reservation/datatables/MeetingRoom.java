@@ -9,16 +9,44 @@ public class MeetingRoom {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String room_name;
-    private Integer capasity;
+    private String roomName;
+    private Integer capacity;
 
     public MeetingRoom() {
     }
-    public MeetingRoom(String room_name, Integer capasity) {
-        this.room_name = room_name;
-        this.capasity = capasity;
+    public MeetingRoom(String roomName, Integer capacity) {
+        this.roomName = roomName;
+        this.capacity = capacity;
     }
 
     @OneToOne(mappedBy = "meetingRoom")     // Bidirectional communication
     private Reservation reservation;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(Integer capacity) {
+        this.capacity = capacity;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
 }
