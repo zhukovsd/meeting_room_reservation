@@ -19,7 +19,7 @@
     </appender>
 
     # Override log level for specified package
-    <logger name="com.mokhovav.mrr" level="TRACE"/>
+    <logger name="com.mokhovav.mrr" level="DEBUG"/> <!--TRACE-->
 
     <root level="INFO">
         <appender-ref ref="Console" />

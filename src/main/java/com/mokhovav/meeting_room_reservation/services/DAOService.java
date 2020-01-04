@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -55,6 +56,21 @@ public class DAOService<T> implements DAO<T> {
         if (list.isEmpty()) return null;
         else return  list.get(0);
     }
+
+    @Override
+    public List<T> findAllBy(Class c, Map<String, Object> map) {
+        Session session = sessionFactory.openSession();
+        String find = "";
+        int count = map.size();
+        for (String key : map.keySet()){
+            find = find+key+"="+map.get(key);
+            if (count-- > 1) find = find+" and ";
+        }
+        List<T> list =  session.createQuery("from "+c.getName()+" where "+find).list();
+        session.close();
+        return  list;
+    }
+
 
     @Override
     public List<T> findAllBy(Class c, String field, Object value) {

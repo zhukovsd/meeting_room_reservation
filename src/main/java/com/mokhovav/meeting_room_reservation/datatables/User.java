@@ -1,17 +1,24 @@
 package com.mokhovav.meeting_room_reservation.datatables;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {      //UserDetails need for login
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Username cannot be empty")
     private String userName;
+    @NotBlank(message = "Password cannot be empty")
     private String password;
+
     private boolean active;
     private boolean changePassword;
 
@@ -35,6 +42,20 @@ public class User {
         this.password = password;
         active = true;
         changePassword = true;
+    }
+
+    public boolean isRole(Role role) {
+        for (Role r : roles)
+            if (r.getRoleName().equals(role.getRoleName()))
+                return true;
+        return false;
+    }
+
+    public boolean isRole(String role) {
+        for (Role r : roles)
+            if (r.getRoleName().equals(role))
+                return true;
+        return false;
     }
 
     public Long getId() {
@@ -103,5 +124,35 @@ public class User {
 
     public void setReceiveMessages(Set<Message> receiveMessages) {
         this.receiveMessages = receiveMessages;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
     }
 }

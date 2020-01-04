@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Reservation</title>
+    <a href="/user">users</a>
 </head>
 <body>
-    Hello!
+    <div>MAIN SCREEN</div>
+    <div th:if="!${isAccess}"><a href="/login">login</a></div>
+    <div th:if="${isAccess}">
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <div><a href="conferences">Conferences</a></div>
+    <div th:if="${adminAccess}"> <a href="/registration">Registration</a></div>
+    <div>[[${message}]]</div>
 </body>
 </html>

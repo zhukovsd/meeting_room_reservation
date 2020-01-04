@@ -1,6 +1,9 @@
 package com.mokhovav.meeting_room_reservation.datatables;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
@@ -11,14 +14,26 @@ public class Message {
     private Long id;
 
     private String title;
+    @NotBlank(message = "Please fill the message")
+    @Length(max = 2048, message = "Message to long (more than 2kB)")
     private String text;
 
-    @ManyToOne (targetEntity = User.class, fetch = FetchType.LAZY)
+    @ManyToOne (targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn (name = "user_id") //column name
     private User author;
 
     @ManyToMany (targetEntity = User.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "message_address", joinColumns = @JoinColumn(name = "messages_id"))
     private Set<User> addressees;
+
+    public Message(String title, String text, User author) {
+        this.title = title;
+        this.text = text;
+        this.author = author;
+    }
+
+    public Message() {
+    }
 
     public Long getId() {
         return id;

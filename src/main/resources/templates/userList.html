@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation</title>
+</head>
+<body>
+    <a href="/registration">Registration</a>
+    LIST OF USERS
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+            <tr th:each="user : ${users}">
+                <td><span th:text="${user.userName}"/></td>
+                <td th:each="role, iterStat : ${user.roles}">
+                    <span th:text="${!iterStat.last} ? ${role.roleName} + ', ': ${role.roleName}"></span>
+                </td>
+                <td><a th:href="@{'/user/'+${user.id}}">edit</a> </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
