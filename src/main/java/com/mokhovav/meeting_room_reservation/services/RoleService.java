@@ -1,8 +1,6 @@
 package com.mokhovav.meeting_room_reservation.services;
 
 import com.mokhovav.meeting_room_reservation.datatables.Role;
-import com.mokhovav.meeting_room_reservation.datatables.User;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,30 +8,55 @@ import java.util.List;
 @Service
 public class RoleService {
     final DAOService daoService;
-    final Logger logger;
 
-    public RoleService(DAOService daoService, Logger logger) {
+    public RoleService(DAOService daoService) {
         this.daoService = daoService;
-        this.logger = logger;
     }
 
-    public boolean addRole(String roleName){
-        Role roleFromDb = (Role) daoService.findBy(Role.class, "roleName", roleName.toLowerCase());
-        if (roleFromDb != null) return false;
-        Role role = new Role(roleName.toLowerCase());
-        daoService.save(role);
+    public boolean isExist(String name) {
+        return name.isEmpty() ? false : (Role)daoService.findObject("from Role where rolename='"+name+"'") != null;
+    }
+
+    public boolean isExist(Role role) {
+        return role!=null ? isExist(role.getRoleName()) : false;
+    }
+
+    public boolean isExist(Long id) {
+        return getById(id) != null;
+    }
+
+    public boolean save(Role role){
+        if(!isExist(role) && !role.getRoleName().isEmpty()) {
+            daoService.save(role);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean update(Role role) {
+        if( role!=null && getById(role.getId()) != null  && !role.getRoleName().isEmpty()) {
+            daoService.update(role);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean delete(Long id) {
+        Role role = getById(id);
+        if(role == null ) return false;
+        daoService.delete(role);
         return true;
     }
 
-    public Role getRole(String roleName){
-        return (Role) daoService.findBy(Role.class, "roleName", roleName.toLowerCase());
+    public Role getByRoleName(String name){
+        return name.isEmpty()? null : (Role)daoService.findObject("from Role where rolename='"+name+"'");
     }
 
-    public List<Role> getRoles(){
-        return (List<Role>) daoService.findAll(Role.class);
+    public Role getById(Long id){
+        return id > 0 ? (Role)daoService.findObject("from Role where id="+id) : null;
     }
 
-    public boolean isRole(String roleName){
-        return ((Role)daoService.findBy(Role.class, "roleName", roleName.toLowerCase())) != null;
+    public List<Role> getAll(){
+        return (List<Role>)daoService.findAll(Role.class);
     }
 }

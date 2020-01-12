@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<body th:fragment="navbar">
+    <!--navigation bar -lg -Screen size for no collapsed menu. -light - Color theme -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Registration</a>
+        <!-- Button on the screen that less than -lg -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navigation bar. collapse - collapsible-->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!--automatically generated menu-->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/conferences">Conferences</a>
+                </li>
+                <li class="nav-item" >
+                    <a sec:authorize="hasAuthority('admin')" class="nav-link" href="/userControl">User Control</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="!isAuthenticated()" class="nav-link" href="/user/login">login</a></a>
+                    <div sec:authorize="isAuthenticated()" th:replace="parts/login::logoutLabel"></div>
+                </li>
+            </ul>
+            <div sec:authorize="isAuthenticated()" class="navbar-text"><span sec:authentication="name"></span></div>
+        </div>
+    </nav>
+</body>
+</html>

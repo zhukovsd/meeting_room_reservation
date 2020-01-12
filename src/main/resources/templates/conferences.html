@@ -1,13 +1,128 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Reservation</title>
-</head>
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="parts/common::head"/>
+
 <body>
-    <a href="/">Home</a>
-        <div>CONFERENCES</div>
-        <div>Hello, [[${username}]]</div>
+    <div th:replace="parts/common::body"></div>
+    <section class="header" style="color: white">
+        <div class="container">
+            <div class="row" style="width: 1140px; background: palevioletred;">
+                <div class="col" style="margin: 0px 50px 0px 120px;">
+                    <div class="row" style="border-bottom-style: solid; border-color: white" >
+                        <div class="col" th:each="day : ${schedule}">
+                            <div><span th:text="${day.dayOfWeek}"/></div>
+                            <div><span th:text="${day.date}"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="body" style="color: white">
+        <div class="container">
+            <div class="row" style="width: 1140px; height: 625px; background: palevioletred;">
+                <div class="col" style="margin: 25px 50px 0px 25px;">
+                    <div class="row" style="height: 600px;" >
+                        <div class="col-1" style="border-right-style: solid; border-color: white; height: 600px;">
+                            <tr th:each="t : ${time}">
+                                <span th:text="${t}"/>
+                            </tr>
+                        </div>
+                        <div class="col" style="border-right-style: solid; border-color: white; height: 600px; " th:each="day : ${schedule}" >
+                            <div th:each="key : ${day.reservations.keySet()}">
+                                <div th:with="res=${day.reservations.get(key)}">
+                                    <a th:href="@{'/conferences/showReservation/'+${res.getId()}}" style="text-decoration: none;">
+                                        <div class="card"
+                                             th:style="'color: black; margin-top:' + (600*${key})/(24*3600000) + 'px; height: ' + (600*(${res.getTimeEnd()}-${res.getTimeBegin()}))/(24*3600000) + 'px;'" >
+                                            <span style="font-size: xx-small; font-weight: bold; line-height: 100%">[[${res.getTitle()}]]</span>
+                                            <span style="font-size: xx-small; font-weight: bold; line-height: 100%">[[${res.getUserName()}]]</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="footer">
+        <div class="container">
+            <div class="row" style="width: 1140px; background: palevioletred;">
+                <div class="col-1" style="margin: 25px 0px 25px 0px;">
+                    <a class="page-link" href="/conferences/prevWeek">Prev</a>
+                </div>
+                <div class="col-10 d-flex justify-content-center" style="align-self: center;">
+                    <div sec:authorize="isAuthenticated()" class="float-left pagination-detail">
+                        <form th:action="'conferences/addReservation'" method="get">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button class="btn btn-primary" type="submit">Add Reservation</button>
+                        </form>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()" class="float-left pagination-detail">
+                        <label class="col-form-label">Authorization is required to add a conference</label>
+                    </div>
+                </div>
+                <div class="col-1" style="margin: 25px 0px 25px 0px;">
+                    <a class="page-link" href="/conferences/nextWeek">Next</a>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
+
+<!--body>
+    <div th:replace="parts/common::body"></div>
+    <div class="container">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr style="line-height: 16px;">
+                <th></th>
+                <div th:each="key : ${dateMap.keySet()}">
+                   <th data-editable="true" >
+                        <div><span th:text="${key}"/></div>
+                        <div><span th:text="${dateMap.get(key)}"/></div>
+                    </th>
+                </div>
+            </tr>
+            </thead>
+            <tbody>
+                <div th:each="t : ${time}">
+                    <tr style="line-height: 8px;">
+                        <td style="">[[${t}]]</td>
+                        <td style="">
+                            <a href="javascript:void(0)" data-name="name" data-pk="undefined" data-value="Item 0" class="editable editable-click editable-open" data-original-title="" title="" aria-describedby="popover286632">Item 0</a>
+                        </td>
+                        <td style="">
+                            <a href="javascript:void(0)" data-name="price" data-pk="undefined" data-value="$0" class="editable editable-click">$0</a>
+                        </td>
+                    </tr>
+                </div>
+            </tbody>
+        </table>
+        <div sec:authorize="isAuthenticated()" class="float-left pagination-detail">
+            <form th:action="'conferences/addReservation'" method="get">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button class="btn btn-primary" type="submit">Add Reservation</button>
+            </form>
+        </div>
+        <div sec:authorize="!isAuthenticated()" class="float-left pagination-detail">
+            <label class="col-form-label">Authorization is required to add a conference</label>
+        </div>
+        <div class="float-right pagination">
+
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="/conferences/prevWeek">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/conferences/nextWeek">Next</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body-->

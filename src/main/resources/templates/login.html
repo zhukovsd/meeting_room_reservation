@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Reservation</title>
-</head>
+
+<head th:replace="parts/common::head"/>
+
 <body>
-    <div><a href="/">Home</a></div>
-    <div>LOGIN</div>
-    <form th:action="@{/login}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <div>Username : <input type="text" name="username" placeholder="Enter user name"/></div>
-        <div>Password : <input type="password" name="password" placeholder="Enter password"/></div>
-        <div th:if="${param.error}"> Invalid username and password. </div>
-        <div th:if="${param.logout}"> You have been logged out. </div>
-        <div><input type="submit" name="text" value="Sign in"/></div>
-    </form>
+    <div th:replace="parts/common::body"></div>
+    <div class="container mt-1 ml-1">
+        <div th:if="${state=='login'}">
+            <label class="col-form-label">LOGIN</label>
+            <!--"loginForm(action, showUsername, showConfirm, message, buttonText)"-->
+            <div th:replace="parts/login::loginForm(@{'/user/login'}, true, false, null, 'Sign In')"></div>
+        </div>
+        <div th:if="${state=='changePassword'}">
+            <label class="col-form-label">CHANGE PASSWORD</label>
+            <!-- parts/login::login(action, showUsername, showConfirm, message, buttonText) -->
+            <div th:replace="parts/login::loginForm('/user/changePassword', false, true, ${message}, 'Change password')"></div>
+        </div>
+    </div>
 </body>
 </html>

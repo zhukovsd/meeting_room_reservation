@@ -1,7 +1,9 @@
 package com.mokhovav.meeting_room_reservation.datatables;
 
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {      //UserDetails need for login
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,9 +40,10 @@ public class User implements UserDetails {      //UserDetails need for login
 
     public User() {
     }
+
     public User(String userName, String password) {
         this.userName = userName;
-        this.password = password;
+        this.password =password;
         active = true;
         changePassword = true;
     }
@@ -126,6 +130,7 @@ public class User implements UserDetails {      //UserDetails need for login
         this.receiveMessages = receiveMessages;
     }
 
+    /* For thymeleaf-extras-springsecurity5*/
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -133,7 +138,7 @@ public class User implements UserDetails {      //UserDetails need for login
 
     @Override
     public String getUsername() {
-        return null;
+        return userName;
     }
 
     @Override

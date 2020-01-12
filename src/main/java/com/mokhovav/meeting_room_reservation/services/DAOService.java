@@ -1,16 +1,11 @@
 package com.mokhovav.meeting_room_reservation.services;
 
-import com.mokhovav.meeting_room_reservation.configurations.HibernateConfiguration;
-import com.mokhovav.meeting_room_reservation.datatables.Role;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Service
 public class DAOService<T> implements DAO<T> {
@@ -49,15 +44,48 @@ public class DAOService<T> implements DAO<T> {
     }
 
     @Override
+    public T getById(Long id) {
+        Session session = sessionFactory.openSession();
+        T result = (T) session.get(getClass(), id);
+        session.close();
+        return result;
+    }
+
+    @Override
+    public List<T> findList(String text) {
+        Session session = sessionFactory.openSession();
+        List<T> list = session.createQuery(text).list();
+        session.close();
+        return list;
+    }
+
+    @Override
+    public T findObject(String text) {
+        Session session = sessionFactory.openSession();
+        List<T> list = session.createQuery(text).list();
+        session.close();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
+    public List<T> findAll(Class c) {
+        Session session = sessionFactory.openSession();
+        List<T> list = (List<T>) session.createQuery("From " + c.getName()).list();
+        session.close();
+        return list;
+    }
+}
+
+    /* @Override
     public T findBy(Class c, String field, Object value) {
         Session session = sessionFactory.openSession();
         List<T> list =  session.createQuery("from "+c.getName()+" where "+field+"=:value").setParameter("value",value).list();
         session.close();
         if (list.isEmpty()) return null;
         else return  list.get(0);
-    }
+    }/**/
 
-    @Override
+   /* @Override
     public List<T> findAllBy(Class c, Map<String, Object> map) {
         Session session = sessionFactory.openSession();
         String find = "";
@@ -69,23 +97,15 @@ public class DAOService<T> implements DAO<T> {
         List<T> list =  session.createQuery("from "+c.getName()+" where "+find).list();
         session.close();
         return  list;
-    }
+    }/**/
 
 
-    @Override
+   /* @Override
     public List<T> findAllBy(Class c, String field, Object value) {
         Session session = sessionFactory.openSession();
         List<T> list = session.createQuery("from "+c.getName()+" where "+field+"=:value").setParameter("value",value).list();
         session.close();
         return list;
-    }
+    }/**/
 
-    @Override
-    public List<T> findAll(Class c) {
-        Session session = sessionFactory.openSession();
-        List<T> list = (List<T>) session.createQuery("From "+ c.getName()).list();
-        session.close();
-        return list;
-    }
 
-}
